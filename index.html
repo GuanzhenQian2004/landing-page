@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+        <meta name="description" content="Portfolio of Steven Qian, specializing in software development, machine learning, cloud computing, and data analysis." />
+        <meta name="author" content="Steven Qian" />
+        <title>Steven Qian - Portfolio</title>
+        <!-- Favicon-->
+        <link rel="icon" type="image/x-icon" href="assets/favicon.ico" />
+        <!-- Custom Google font-->
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+        <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@100;200;300;400;500;600;700;800;900&amp;display=swap" rel="stylesheet" />
+        <!-- Bootstrap icons-->
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.8.1/font/bootstrap-icons.css" rel="stylesheet" />
+        <!-- Core theme CSS (includes Bootstrap)-->
+        <link href="css/styles.css" rel="stylesheet" />
+        <style>
+            body {
+                background-color: #121212;
+                color: #ffffff;
+            }
+            .navbar {
+                background-color: #1e1e1e;
+                position: sticky;
+                top: 0;
+                z-index: 1000;
+            }
+            .navbar-brand {
+                font-size: 1.5rem;
+                color: #ffffff;
+            }
+            .navbar-nav .nav-link {
+                color: #b3b3b3;
+            }
+            .navbar-nav .nav-link.active {
+                color: #ffffff;
+            }
+            .bg-light {
+                background-color: #2c2c2c !important;
+            }
+            .card {
+                background-color: #1e1e1e;
+                border: none;
+            }
+            .text-primary {
+                color: #d4af37 !important;
+            }
+            .text-muted {
+                color: #b3b3b3 !important;
+            }
+            .text-white {
+                color: #ffffff;
+            }
+            .btn-primary {
+                background-color: #d4af37;
+                border: none;
+            }
+            .btn-outline-dark {
+                color: #ffffff;
+                border-color: #d4af37;
+            }
+            .btn-outline-dark:hover {
+                background-color: #d4af37;
+                color: #121212;
+            }
+            footer {
+                background-color: #1e1e1e;
+            }
+            .section-heading {
+                font-size: 2rem;
+                margin-bottom: 1.5rem;
+                color: #d4af37;
+            }
+            .section-content {
+                margin-bottom: 3rem;
+            }
+            .badge-large {
+                font-size: 1.0rem; /* Increase this value to make the text larger */
+                font-weight: bold;
+            }
+            .profile-img {
+                width: 400px;  /* Set the desired width */
+                height: auto;  /* Maintain aspect ratio */
+            }
+            .line1 {
+                font-size: 2.0rem;  /* Adjust the size for the first line */
+                color: #ffffff;      /* White color */
+            }
+
+            .line2 {
+                font-size: 5.0rem;   /* Adjust the size for the second line (larger) */
+                color: #d4af37;      /* Gold accent color */
+            }
+
+            .line3 {
+                font-size: 2.0rem;   /* Adjust the size for the third line */
+                color: #ffffff;      /* White color */
+            }
+            .button-container {
+                margin-top: 50px; /* Moves the buttons down */
+            }
+        </style>
+    </head>
+    <body class="d-flex flex-column h-100">
+        <main class="flex-shrink-0">
+            <!-- Navigation-->
+            <nav class="navbar navbar-expand-lg navbar-light bg-dark py-3">
+                <div class="container px-5">
+                    <a class="navbar-brand" href="index.html"><span class="fw-bolder text-white">Steven Qian</span></a>
+                    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation"><span class="navbar-toggler-icon"></span></button>
+                    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                        <ul class="navbar-nav ms-auto mb-2 mb-lg-0 small fw-bolder">
+                            <li class="nav-item"><a class="nav-link active" href="index.html">Home</a></li>
+                            <li class="nav-item"><a class="nav-link" href="resume.html">Resume</a></li>
+                            <li class="nav-item"><a class="nav-link" href="projects.html">Projects</a></li>
+                            <li class="nav-item"><a class="nav-link" href="contact.html">Contact</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </nav>
+            <!-- Header-->
+            <header class="py-5">
+                <div class="container px-5 pb-5">
+                    <div class="row gx-5 align-items-center">
+                        <div class="col-xxl-5">
+                            <!-- Header text content-->
+                            <div class="text-center text-xxl-start">
+                                <div class="badge bg-primary text-white mb-4 badge-large">
+                                    <div class="text-uppercase">Software &middot; Machine Learning &middot; Cloud Computing &middot; Data Analysis</div>
+                                </div>
+                                <div class="intro-text">
+                                    <span class="line1">Hi there, my name is</span><br>
+                                    <span class="line2">Steven Qian</span><br>
+                                    <span class="line3">I am a full stack developer</span>
+                                </div>
+                                <div class="d-grid gap-3 d-sm-flex justify-content-sm-center justify-content-xxl-start mb-3 button-container">
+                                    <a class="btn btn-primary btn-lg px-5 py-3 me-sm-3 fs-6 fw-bolder" href="resume.html">Resume</a>
+                                    <a class="btn btn-outline-dark btn-lg px-5 py-3 fs-6 fw-bolder" href="projects.html">Projects</a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-xxl-7">
+                            <!-- Header profile picture-->
+                            <div class="d-flex justify-content-center mt-5 mt-xxl-0">
+                                <img class="img-fluid rounded-circle profile-img" src="assets/profile.png" alt="Steven Qian" />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </header>
+            <!-- About Section-->
+            <section class="bg-dark py-5">
+                <div class="container px-5">
+                    <div class="text-center my-5">
+                        <h2 class="section-heading">About Me</h2>
+                        <p class="lead fw-light mb-4">I'm Steven Qian, a passionate Computer Science student at the University of Virginia, focusing on Machine Learning, Cloud Computing, and Software Development.</p>
+                        <p class="text-muted mb-4">With a solid background in Python, Java, TensorFlow, AWS, and more, I have experience building scalable solutions for real-world problems. My recent projects include working as a Data Pipeline Developer for Code for Charlottesville and developing an AI-powered assistant that won first place in a university hackathon.</p>
+                        <p class="text-muted mb-4">When I'm not coding, you can find me exploring the latest in AI technology, contributing to open-source projects, or learning new skills online. I'm always open to new opportunities and collaborations in tech.</p>
+                    </div>
+                </div>
+            </section>
+            <!-- Expertise Section -->
+            <section class="py-5">
+                <div class="container px-5">
+                    <div class="text-center section-content">
+                        <h2 class="section-heading">Areas of Expertise</h2>
+                        <div class="row gx-5">
+                            <div class="col-lg-3 mb-5 mb-lg-0">
+                                <div class="text-center">
+                                    <i class="bi bi-laptop fs-1 text-primary"></i>
+                                    <h3 class="fw-bolder mt-3">Software Development</h3>
+                                    <p class="text-muted mb-0">Building robust and efficient software solutions using modern programming languages and tools.</p>
+                                </div>
+                            </div>
+                            <div class="col-lg-3 mb-5 mb-lg-0">
+                                <div class="text-center">
+                                    <i class="bi bi-cpu fs-1 text-primary"></i> <!-- Updated icon class -->
+                                    <h3 class="fw-bolder mt-3">Machine Learning</h3>
+                                    <p class="text-muted mb-0">Designing and implementing machine learning models to solve complex problems in various domains.</p>
+                                </div>
+                            </div>
+                            <div class="col-lg-3 mb-5 mb-lg-0">
+                                <div class="text-center">
+                                    <i class="bi bi-cloud fs-1 text-primary"></i>
+                                    <h3 class="fw-bolder mt-3">Cloud Computing</h3>
+                                    <p class="text-muted mb-0">Leveraging cloud platforms to build scalable, secure, and high-performance applications.</p>
+                                </div>
+                            </div>
+                            <div class="col-lg-3">
+                                <div class="text-center">
+                                    <i class="bi bi-graph-up fs-1 text-primary"></i>
+                                    <h3 class="fw-bolder mt-3">Data Analysis</h3>
+                                    <p class="text-muted mb-0">Analyzing data to uncover insights and drive data-driven decision-making processes.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            <!-- Call to Action Section -->
+            <section class="bg-dark py-5">
+                <div class="container px-5">
+                    <div class="text-center">
+                        <h2 class="section-heading">Let's Work Together</h2>
+                        <p class="lead fw-light mb-4">I'm always looking for exciting projects and collaborations. If you're interested in working with me, feel free to reach out!</p>
+                        <a class="btn btn-primary btn-lg px-5 py-3 me-sm-3 fs-6 fw-bolder" href="contact.html">Contact Me</a>
+                    </div>
+                </div>
+            </section>
+        </main>
+        <!-- Footer-->
+        <footer class="bg-dark py-4 mt-auto">
+            <div class="container px-5">
+                <div class="row align-items-center justify-content-between flex-column flex-sm-row">
+                    <div class="col-auto"><div class="small m-0 text-white">Copyright &copy; Steven Qian 2024</div></div>
+                </div>
+            </div>
+        </footer>
+        <!-- Bootstrap core JS-->
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
+        <!-- Core theme JS-->
+        <script src="js/scripts.js"></script>
+    </body>
+</html>
