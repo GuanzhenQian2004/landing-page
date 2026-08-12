@@ -1,0 +1,141 @@
+---
+// Renders /public/resume.pdf onto styled white page canvases so the resume
+// matches the site's editorial look instead of the browser's dark PDF chrome.
+// The PDF itself stays the single source of truth — replace the file and this
+// component picks up the new content with no code changes.
+interface Props {
+  src?: string;
+}
+const { src = '/resume.pdf' } = Astro.props;
+---
+
+<div class="pdf" data-pdf data-src={src}>
+  <div class="pdf__status" data-status>
+    <span class="pdf__spinner" aria-hidden="true"></span>
+    <span class="caption">Loading resume…</span>
+  </div>
+  <div class="pdf__pages" data-pages></div>
+
+  <noscript>
+    <div class="pdf__fallback">
+      <p class="text-muted" style="margin:0">Enable JavaScript to preview the resume here.</p>
+      <a class="btn btn-primary" href={src} target="_blank" rel="noopener">Open resume</a>
+    </div>
+  </noscript>
+</div>
+
+<style>
+  .pdf {
+    position: relative;
+  }
+  .pdf__pages {
+    display: flex;
+    flex-direction: column;
+    gap: var(--s-lg);
+  }
+  .pdf__page {
+    width: 100%;
+    height: auto;
+    display: block;
+    background: var(--surface-card);
+    border: 1px solid var(--hairline);
+    border-radius: var(--r-xl);
+    box-shadow: var(--shadow-soft);
+  }
+  .pdf__status,
+  .pdf__fallback {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: var(--s-base);
+    min-height: 320px;
+    padding: var(--s-xxl) var(--s-lg);
+    text-align: center;
+    background: var(--surface-card);
+    border: 1px solid var(--hairline);
+    border-radius: var(--r-xl);
+  }
+  .pdf__status[hidden] {
+    display: none;
+  }
+  .pdf__spinner {
+    width: 22px;
+    height: 22px;
+    border: 1.5px solid var(--hairline-strong);
+    border-top-color: var(--ink);
+    border-radius: 50%;
+    animation: pdf-spin 0.7s linear infinite;
+  }
+  @keyframes pdf-spin {
+    to {
+      transform: rotate(360deg);
+    }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .pdf__spinner {
+      animation-duration: 2s;
+    }
+  }
+</style>
+
+<script>
+  import * as pdfjs from 'pdfjs-dist';
+  // Vite resolves this to a hashed asset URL at build time (no CDN needed).
+  import workerUrl from 'pdfjs-dist/build/pdf.worker.min.mjs?url';
+
+  pdfjs.GlobalWorkerOptions.workerSrc = workerUrl;
+
+  const root = document.querySelector<HTMLElement>('[data-pdf]');
+  const pagesEl = root?.querySelector<HTMLElement>('[data-pages]');
+  const statusEl = root?.querySelector<HTMLElement>('[data-status]');
+  const src = root?.dataset.src ?? '/resume.pdf';
+
+  function showFallback(message: string) {
+    if (!statusEl) return;
+    statusEl.className = 'pdf__fallback';
+    statusEl.innerHTML = `
+      <p class="text-muted" style="margin:0">${message}</p>
+      <a class="btn btn-primary" href="${src}" target="_blank" rel="noopener">Open resume</a>`;
+  }
+
+  async function renderPdf() {
+    if (!root || !pagesEl) return;
+    try {
+      const doc = await pdfjs.getDocument({ url: src }).promise;
+
+      // Render crisply on high-DPI screens, capped so wide monitors stay light.
+      const dpr = Math.min(window.devicePixelRatio || 1, 2);
+      const cssWidth = Math.min(pagesEl.clientWidth || 900, 900);
+
+      for (let n = 1; n <= doc.numPages; n++) {
+        const page = await doc.getPage(n);
+        const base = page.getViewport({ scale: 1 });
+        const viewport = page.getViewport({ scale: (cssWidth / base.width) * dpr });
+
+        const canvas = document.createElement('canvas');
+        canvas.className = 'pdf__page';
+        // Intrinsic size drives the rendered ratio; CSS scales it to the column.
+        canvas.width = Math.floor(viewport.width);
+        canvas.height = Math.floor(viewport.height);
+        canvas.setAttribute('role', 'img');
+        canvas.setAttribute(
+          'aria-label',
+          `Resume page ${n} of ${doc.numPages}. Download the PDF for a text version.`
+        );
+
+        const ctx = canvas.getContext('2d');
+        if (!ctx) continue;
+        await page.render({ canvas, canvasContext: ctx, viewport }).promise;
+        pagesEl.appendChild(canvas);
+      }
+
+      statusEl?.setAttribute('hidden', '');
+    } catch (err) {
+      console.error('Resume preview failed to render:', err);
+      showFallback("The resume preview couldn't load.");
+    }
+  }
+
+  renderPdf();
+</script>

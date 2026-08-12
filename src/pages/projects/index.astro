@@ -1,0 +1,86 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import ProjectCard from '../../components/ProjectCard.astro';
+import { getCollection, render } from 'astro:content';
+
+const entries = (await getCollection('projects', (p) => !p.data.draft)).sort(
+  (a, b) => b.data.date.valueOf() - a.data.date.valueOf()
+);
+
+const cards = await Promise.all(
+  entries.map(async (entry) => {
+    const { Content } = await render(entry);
+    return { entry, Content };
+  })
+);
+---
+
+<BaseLayout
+  title="Projects — Steven Qian"
+  description="Projects by Steven Qian across data engineering, machine learning, and full-stack development."
+>
+  <section class="page-head">
+    <div class="orb orb--lavender page-head__orb"></div>
+    <div class="container page-head__inner">
+      <span class="caption-uppercase text-muted rise">Portfolio</span>
+      <h1 class="display-xl rise" style="--d:0.08s;margin:var(--s-sm) 0 var(--s-base)">
+        Projects
+      </h1>
+      <p class="lead rise" style="--d:0.16s;max-width:60ch;margin:0">
+        Data pipelines, machine learning systems, and web applications — built for
+        classes, hackathons, and real organizations.
+      </p>
+    </div>
+  </section>
+
+  <section class="section--tight" style="padding-top:0">
+    <div class="container">
+      {
+        cards.length === 0 ? (
+          <div class="empty card center">
+            <p class="text-muted" style="margin:0">No projects published yet.</p>
+          </div>
+        ) : (
+          <div class="grid grid-3 stagger">
+            {cards.map(({ entry, Content }) => (
+              <ProjectCard
+                href={`/projects/${entry.id}`}
+                title={entry.data.title}
+                organization={entry.data.organization}
+                dateLabel={entry.data.dateLabel}
+                cover={entry.data.cover}
+                hasVideo={!!entry.data.video}
+                mediaCount={entry.data.gallery.length}
+                tags={entry.data.tags}
+              >
+                {entry.data.summary ? <p>{entry.data.summary}</p> : <Content />}
+              </ProjectCard>
+            ))}
+          </div>
+        )
+      }
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .page-head {
+    position: relative;
+    overflow: hidden;
+    padding: var(--s-section) 0 var(--s-xxl);
+  }
+  .page-head__inner {
+    position: relative;
+    z-index: 1;
+  }
+  .page-head__orb {
+    width: 420px;
+    height: 420px;
+    top: -180px;
+    right: 8%;
+    opacity: 0.4;
+  }
+  .empty {
+    padding: var(--s-xxl);
+  }
+</style>

@@ -1,0 +1,354 @@
+---
+import type { GetStaticPaths } from 'astro';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import MediaGallery from '../../components/MediaGallery.astro';
+import VideoEmbed from '../../components/VideoEmbed.astro';
+import { getCollection, render } from 'astro:content';
+
+export const getStaticPaths = (async () => {
+  const entries = await getCollection('projects', (p) => !p.data.draft);
+  return entries.map((entry) => ({
+    params: { id: entry.id },
+    props: { entry },
+  }));
+}) satisfies GetStaticPaths;
+
+const { entry } = Astro.props;
+const { Content } = await render(entry);
+const d = entry.data;
+
+// Previous/next by date, for continuous browsing at the end of the page.
+const all = (await getCollection('projects', (p) => !p.data.draft)).sort(
+  (a, b) => b.data.date.valueOf() - a.data.date.valueOf()
+);
+const idx = all.findIndex((p) => p.id === entry.id);
+const prev = idx > 0 ? all[idx - 1] : null;
+const next = idx < all.length - 1 ? all[idx + 1] : null;
+
+const facts = [
+  d.organization && { label: 'Organization', value: d.organization },
+  d.role && { label: 'Role', value: d.role },
+  d.dateLabel && { label: 'Timeline', value: d.dateLabel },
+].filter(Boolean) as { label: string; value: string }[];
+---
+
+<BaseLayout
+  title={`${d.title} — Steven Qian`}
+  description={d.summary ?? `${d.title}${d.organization ? ` — ${d.organization}` : ''}`}
+>
+  <article>
+    <!-- Header -->
+    <section class="head">
+      <div class="orb orb--mint head__orb"></div>
+      <div class="container head__inner">
+        <a class="back link-underline" href="/projects">← All projects</a>
+
+        {d.dateLabel && <div class="caption-uppercase head__date rise">{d.dateLabel}</div>}
+        <h1 class="display-xl rise" style="--d:0.06s">{d.title}</h1>
+        {
+          d.summary && (
+            <p class="lead rise" style="--d:0.12s;max-width:62ch">
+              {d.summary}
+            </p>
+          )
+        }
+
+        {
+          (d.link || d.repo) && (
+            <div class="head__cta rise" style="--d:0.18s">
+              {d.link && (
+                <a class="btn btn-primary" href={d.link} target="_blank" rel="noopener">
+                  View live
+                </a>
+              )}
+              {d.repo && (
+                <a class="btn btn-outline" href={d.repo} target="_blank" rel="noopener">
+                  Source code
+                </a>
+              )}
+            </div>
+          )
+        }
+      </div>
+    </section>
+
+    <!-- Hero media: video takes precedence over the cover image -->
+    {
+      (d.video || d.cover) && (
+        <section class="section--tight" style="padding-top:0">
+          <div class="container">
+            <div class="hero-media reveal">
+              {d.video ? (
+                <VideoEmbed src={d.video} title={d.title} />
+              ) : (
+                <img class="hero-media__img" src={d.cover} alt={d.title} />
+              )}
+            </div>
+          </div>
+        </section>
+      )
+    }
+
+    <!-- Body + fact rail -->
+    <section class="section--tight">
+      <div class="container">
+        <div class="layout">
+          <aside class="rail">
+            {
+              facts.length > 0 && (
+                <dl class="facts reveal">
+                  {facts.map((f) => (
+                    <div class="facts__row">
+                      <dt class="caption-uppercase">{f.label}</dt>
+                      <dd class="body-sm">{f.value}</dd>
+                    </div>
+                  ))}
+                </dl>
+              )
+            }
+            {
+              d.tags.length > 0 && (
+                <div class="rail__tags reveal">
+                  <div class="caption-uppercase rail__heading">Built with</div>
+                  <div class="tags">
+                    {d.tags.map((t) => (
+                      <span class="tag">{t}</span>
+                    ))}
+                  </div>
+                </div>
+              )
+            }
+          </aside>
+
+          <div class="prose reveal">
+            <Content />
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Gallery -->
+    {
+      d.gallery.length > 0 && (
+        <section class="section--tight">
+          <div class="container">
+            <div class="caption-uppercase text-muted" style="margin-bottom:var(--s-base)">
+              Gallery
+            </div>
+            <MediaGallery items={d.gallery} />
+          </div>
+        </section>
+      )
+    }
+
+    <!-- Prev / next -->
+    {
+      (prev || next) && (
+        <section class="section--tight">
+          <div class="container">
+            <nav class="pager">
+              {prev ? (
+                <a class="pager__link" href={`/projects/${prev.id}`}>
+                  <span class="caption-uppercase text-muted">Previous</span>
+                  <span class="title-sm">{prev.data.title}</span>
+                </a>
+              ) : (
+                <span />
+              )}
+              {next && (
+                <a class="pager__link pager__link--next" href={`/projects/${next.id}`}>
+                  <span class="caption-uppercase text-muted">Next</span>
+                  <span class="title-sm">{next.data.title}</span>
+                </a>
+              )}
+            </nav>
+          </div>
+        </section>
+      )
+    }
+  </article>
+</BaseLayout>
+
+<style>
+  .head {
+    position: relative;
+    overflow: hidden;
+    padding: var(--s-xxl) 0 var(--s-xl);
+  }
+  .head__inner {
+    position: relative;
+    z-index: 1;
+  }
+  .head__orb {
+    width: 420px;
+    height: 420px;
+    top: -200px;
+    right: 10%;
+    opacity: 0.35;
+  }
+  .back {
+    display: inline-block;
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--muted);
+    margin-bottom: var(--s-xl);
+  }
+  .back:hover {
+    color: var(--ink);
+    opacity: 1;
+  }
+  .head__date {
+    color: var(--muted-soft);
+    margin-bottom: var(--s-sm);
+  }
+  .head h1 {
+    margin-bottom: var(--s-base);
+  }
+  .head__cta {
+    display: flex;
+    gap: var(--s-sm);
+    flex-wrap: wrap;
+    margin-top: var(--s-lg);
+  }
+
+  .hero-media__img {
+    width: 100%;
+    height: auto;
+    max-height: 560px;
+    object-fit: cover;
+    border: 1px solid var(--hairline);
+    border-radius: var(--r-xl);
+    box-shadow: var(--shadow-soft);
+  }
+
+  .layout {
+    display: grid;
+    grid-template-columns: 260px 1fr;
+    gap: var(--s-xxl);
+    align-items: start;
+  }
+  .rail {
+    position: sticky;
+    top: 96px;
+    display: flex;
+    flex-direction: column;
+    gap: var(--s-xl);
+  }
+  .facts {
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: var(--s-base);
+  }
+  .facts__row {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    padding-bottom: var(--s-base);
+    border-bottom: 1px solid var(--hairline);
+  }
+  .facts dt {
+    color: var(--muted-soft);
+  }
+  .facts dd {
+    margin: 0;
+    color: var(--body-strong);
+  }
+  .rail__heading {
+    color: var(--muted-soft);
+    margin-bottom: var(--s-sm);
+  }
+  .tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--s-xs);
+  }
+
+  .prose {
+    max-width: 68ch;
+    font-size: 17px;
+    line-height: 1.65;
+  }
+  .prose :global(h2) {
+    font-size: 28px;
+    margin: var(--s-xl) 0 var(--s-base);
+  }
+  .prose :global(h3) {
+    font-family: var(--font-sans);
+    font-size: 19px;
+    font-weight: 500;
+    margin: var(--s-lg) 0 var(--s-xs);
+  }
+  .prose :global(p) {
+    margin: 0 0 var(--s-base);
+  }
+  .prose :global(strong) {
+    color: var(--body-strong);
+    font-weight: 500;
+  }
+  .prose :global(ul),
+  .prose :global(ol) {
+    padding-left: 1.2em;
+    margin: 0 0 var(--s-base);
+  }
+  .prose :global(li) {
+    margin-bottom: var(--s-xs);
+  }
+  .prose :global(img) {
+    width: 100%;
+    border: 1px solid var(--hairline);
+    border-radius: var(--r-lg);
+    margin: var(--s-lg) 0;
+  }
+  .prose :global(a) {
+    text-decoration: underline;
+    text-underline-offset: 3px;
+  }
+  .prose :global(blockquote) {
+    margin: var(--s-lg) 0;
+    padding-left: var(--s-lg);
+    border-left: 2px solid var(--hairline-strong);
+    color: var(--muted);
+  }
+  .prose :global(code) {
+    font-size: 0.9em;
+    background: var(--surface-strong);
+    padding: 2px 6px;
+    border-radius: var(--r-xs);
+  }
+
+  .pager {
+    display: flex;
+    justify-content: space-between;
+    gap: var(--s-lg);
+    border-top: 1px solid var(--hairline);
+    padding-top: var(--s-xl);
+  }
+  .pager__link {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    max-width: 46%;
+  }
+  .pager__link--next {
+    text-align: right;
+    margin-left: auto;
+  }
+  .pager__link:hover {
+    opacity: 1;
+  }
+  .pager__link:hover .title-sm {
+    text-decoration: underline;
+    text-underline-offset: 3px;
+  }
+
+  @media (max-width: 900px) {
+    .layout {
+      grid-template-columns: 1fr;
+      gap: var(--s-xl);
+    }
+    .rail {
+      position: static;
+    }
+  }
+</style>

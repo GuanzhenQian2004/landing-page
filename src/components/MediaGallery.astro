@@ -1,0 +1,166 @@
+---
+interface GalleryItem {
+  src: string;
+  caption?: string;
+}
+interface Props {
+  items: GalleryItem[];
+}
+const { items } = Astro.props;
+---
+
+{
+  items.length > 0 && (
+    <div class="gallery stagger">
+      {items.map((item, i) => (
+        <figure class="gallery__item">
+          <button
+            class="gallery__btn"
+            type="button"
+            data-lightbox={item.src}
+            data-caption={item.caption ?? ''}
+            aria-label={item.caption ? `Enlarge: ${item.caption}` : `Enlarge image ${i + 1}`}
+          >
+            <img src={item.src} alt={item.caption ?? ''} loading="lazy" />
+          </button>
+          {item.caption && <figcaption class="caption">{item.caption}</figcaption>}
+        </figure>
+      ))}
+    </div>
+  )
+}
+
+<!-- Lightbox -->
+<dialog class="lightbox" data-lightbox-dialog>
+  <button class="lightbox__close" type="button" aria-label="Close">×</button>
+  <img class="lightbox__img" data-lightbox-img src="" alt="" />
+  <p class="lightbox__caption caption" data-lightbox-caption></p>
+</dialog>
+
+<style>
+  .gallery {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: var(--s-lg);
+  }
+  .gallery__item {
+    margin: 0;
+  }
+  .gallery__btn {
+    display: block;
+    width: 100%;
+    padding: 0;
+    border: 1px solid var(--hairline);
+    border-radius: var(--r-xl);
+    overflow: hidden;
+    background: var(--surface-card);
+    cursor: zoom-in;
+    transition: transform 0.3s var(--ease), box-shadow 0.3s var(--ease);
+  }
+  .gallery__btn:hover {
+    transform: translateY(-3px);
+    box-shadow: var(--shadow-soft);
+  }
+  .gallery__btn img {
+    width: 100%;
+    aspect-ratio: 16 / 10;
+    object-fit: cover;
+    transition: transform 0.5s var(--ease);
+  }
+  .gallery__btn:hover img {
+    transform: scale(1.04);
+  }
+  .gallery__item figcaption {
+    margin-top: var(--s-xs);
+  }
+
+  .lightbox {
+    border: 0;
+    padding: 0;
+    background: transparent;
+    max-width: min(1100px, 92vw);
+    max-height: 92vh;
+    overflow: visible;
+  }
+  .lightbox::backdrop {
+    background: rgba(12, 10, 9, 0.82);
+    backdrop-filter: blur(4px);
+  }
+  .lightbox[open] {
+    animation: lightbox-in 0.3s var(--ease) both;
+  }
+  @keyframes lightbox-in {
+    from {
+      opacity: 0;
+      transform: scale(0.97);
+    }
+  }
+  .lightbox__img {
+    width: 100%;
+    height: auto;
+    max-height: 84vh;
+    object-fit: contain;
+    border-radius: var(--r-xl);
+    background: var(--surface-card);
+  }
+  .lightbox__caption {
+    color: var(--on-dark-soft);
+    text-align: center;
+    margin: var(--s-sm) 0 0;
+  }
+  .lightbox__caption:empty {
+    display: none;
+  }
+  .lightbox__close {
+    position: absolute;
+    top: -44px;
+    right: 0;
+    width: 36px;
+    height: 36px;
+    border: 0;
+    border-radius: var(--r-pill);
+    background: rgba(255, 255, 255, 0.14);
+    color: #fff;
+    font-size: 22px;
+    line-height: 1;
+    cursor: pointer;
+    transition: background 0.2s var(--ease);
+  }
+  .lightbox__close:hover {
+    background: rgba(255, 255, 255, 0.26);
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .gallery__btn:hover,
+    .gallery__btn:hover img {
+      transform: none;
+    }
+  }
+</style>
+
+<script>
+  function initGallery() {
+    const dialog = document.querySelector<HTMLDialogElement>('[data-lightbox-dialog]');
+    if (!dialog) return;
+    const img = dialog.querySelector<HTMLImageElement>('[data-lightbox-img]');
+    const cap = dialog.querySelector<HTMLElement>('[data-lightbox-caption]');
+
+    document.querySelectorAll<HTMLButtonElement>('[data-lightbox]').forEach((btn) => {
+      btn.addEventListener('click', () => {
+        if (!img) return;
+        img.src = btn.dataset.lightbox ?? '';
+        img.alt = btn.dataset.caption ?? '';
+        if (cap) cap.textContent = btn.dataset.caption ?? '';
+        dialog.showModal();
+      });
+    });
+
+    dialog.querySelector('.lightbox__close')?.addEventListener('click', () => dialog.close());
+    // Click the backdrop (outside the image) to dismiss.
+    dialog.addEventListener('click', (e) => {
+      if (e.target === dialog) dialog.close();
+    });
+  }
+
+  initGallery();
+  document.addEventListener('astro:page-load', initGallery);
+</script>

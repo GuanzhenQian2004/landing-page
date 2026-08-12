@@ -1,0 +1,142 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+
+const channels = [
+  {
+    label: 'Email',
+    value: 'stevenqian2004@gmail.com',
+    href: 'mailto:stevenqian2004@gmail.com',
+  },
+  {
+    label: 'LinkedIn',
+    value: 'steven-qian-16076822a',
+    href: 'https://www.linkedin.com/in/steven-qian-16076822a',
+    ext: true,
+  },
+  {
+    label: 'GitHub',
+    value: 'GuanzhenQian2004',
+    href: 'https://github.com/GuanzhenQian2004',
+    ext: true,
+  },
+];
+---
+
+<BaseLayout
+  title="Contact — Steven Qian"
+  description="Get in touch with Steven Qian — email, LinkedIn, and GitHub."
+>
+  <section class="page-head">
+    <div class="orb orb--peach page-head__orb page-head__orb--1"></div>
+    <div class="orb orb--mint page-head__orb page-head__orb--2"></div>
+    <div class="container page-head__inner">
+      <span class="caption-uppercase text-muted">Contact</span>
+      <h1 class="display-xl reveal" style="margin:var(--s-sm) 0 var(--s-base)">
+        Get in touch.
+      </h1>
+      <p class="lead reveal" style="max-width:52ch;margin:0">
+        Whether you have a role, a project idea, or just want to talk about ML and
+        infrastructure — I'd be glad to hear from you.
+      </p>
+    </div>
+  </section>
+
+  <section class="section--tight" style="padding-top:0">
+    <div class="container">
+      <div class="channels reveal">
+        {
+          channels.map((c) => (
+            <a
+              class="channel"
+              href={c.href}
+              {...('ext' in c && c.ext ? { target: '_blank', rel: 'noopener' } : {})}
+            >
+              <span class="caption-uppercase channel__label">{c.label}</span>
+              <span class="title-sm channel__value">{c.value}</span>
+              <span class="channel__arrow" aria-hidden="true">↗</span>
+            </a>
+          ))
+        }
+      </div>
+
+      <div class="closing reveal">
+        <p class="text-muted body-sm" style="margin:0">
+          Based in Charlottesville, VA · Prefer a quick overview?
+          <a href="/resume.pdf" style="text-decoration:underline">Download my resume</a>.
+        </p>
+      </div>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .page-head {
+    position: relative;
+    overflow: hidden;
+    padding: var(--s-section) 0 var(--s-xxl);
+  }
+  .page-head__inner {
+    position: relative;
+    z-index: 1;
+  }
+  .page-head__orb {
+    width: 400px;
+    height: 400px;
+    opacity: 0.4;
+  }
+  .page-head__orb--1 {
+    top: -160px;
+    right: 12%;
+  }
+  .page-head__orb--2 {
+    top: 40px;
+    right: 34%;
+    width: 300px;
+    height: 300px;
+    opacity: 0.3;
+  }
+
+  .channels {
+    border-top: 1px solid var(--hairline);
+    max-width: 720px;
+  }
+  .channel {
+    display: grid;
+    grid-template-columns: 120px 1fr auto;
+    align-items: center;
+    gap: var(--s-base);
+    padding: var(--s-lg) 0;
+    border-bottom: 1px solid var(--hairline);
+  }
+  .channel:hover {
+    opacity: 1;
+  }
+  .channel__label {
+    color: var(--muted-soft);
+  }
+  .channel__value {
+    color: var(--ink);
+  }
+  .channel__arrow {
+    color: var(--muted-soft);
+    font-size: 14px;
+    transition: transform 0.2s var(--ease), color 0.2s var(--ease);
+  }
+  .channel:hover .channel__arrow {
+    color: var(--ink);
+    transform: translate(2px, -2px);
+  }
+  .closing {
+    margin-top: var(--s-xl);
+  }
+
+  @media (max-width: 640px) {
+    .channel {
+      grid-template-columns: 1fr auto;
+      gap: var(--s-xxs) var(--s-base);
+    }
+    .channel__label {
+      grid-column: 1 / -1;
+    }
+  }
+</style>

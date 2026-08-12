@@ -1,0 +1,587 @@
+/* ============================================================
+   Design tokens — editorial system
+   Off-white canvas, warm near-black ink, pastel atmospheric orbs.
+   Display: EB Garamond 300 (Waldenburg Light substitute).
+   Body: Inter 400/500 with +0.16px tracking.
+   ============================================================ */
+:root {
+  /* Brand / action */
+  --primary: #292524;
+  --primary-active: #0c0a09;
+
+  /* Text */
+  --ink: #0c0a09;
+  --body: #4e4e4e;
+  --body-strong: #292524;
+  --muted: #777169;
+  --muted-soft: #a8a29e;
+  --on-primary: #ffffff;
+  --on-dark: #ffffff;
+  --on-dark-soft: #a8a29e;
+
+  /* Surfaces */
+  --canvas: #f5f5f5;
+  --canvas-soft: #fafafa;
+  --canvas-deep: #0c0a09;
+  --surface-card: #ffffff;
+  --surface-strong: #f0efed;
+  --surface-dark: #0c0a09;
+  --surface-dark-elevated: #1c1917;
+
+  /* Hairlines */
+  --hairline: #e7e5e4;
+  --hairline-soft: #f0efed;
+  --hairline-strong: #d6d3d1;
+
+  /* Atmospheric gradient stops — decoration only, never fills or text */
+  --gradient-mint: #a7e5d3;
+  --gradient-peach: #f4c5a8;
+  --gradient-lavender: #c8b8e0;
+  --gradient-sky: #a8c8e8;
+  --gradient-rose: #e8b8c4;
+
+  /* Semantic */
+  --success: #16a34a;
+  --error: #dc2626;
+
+  /* Type families */
+  --font-display: 'EB Garamond', 'Times New Roman', serif;
+  --font-sans: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+
+  /* Radius */
+  --r-xs: 4px;
+  --r-sm: 6px;
+  --r-md: 8px;
+  --r-lg: 12px;
+  --r-xl: 16px;
+  --r-xxl: 24px;
+  --r-pill: 9999px;
+
+  /* Spacing */
+  --s-xxs: 4px;
+  --s-xs: 8px;
+  --s-sm: 12px;
+  --s-base: 16px;
+  --s-md: 20px;
+  --s-lg: 24px;
+  --s-xl: 32px;
+  --s-xxl: 48px;
+  --s-section: 96px;
+
+  /* Layout */
+  --maxw: 1200px;
+
+  /* Elevation — single soft tier */
+  --shadow-soft: 0 4px 16px rgba(0, 0, 0, 0.04);
+
+  --ease: cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+/* ============================================================
+   Reset / base
+   ============================================================ */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  margin: 0;
+  font-family: var(--font-sans);
+  font-size: 16px;
+  font-weight: 400;
+  line-height: 1.5;
+  letter-spacing: 0.16px;
+  background-color: var(--canvas);
+  color: var(--body);
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+main {
+  flex: 1 0 auto;
+}
+
+a {
+  color: var(--ink);
+  text-decoration: none;
+  transition: color 0.2s var(--ease), opacity 0.2s var(--ease);
+}
+a:hover {
+  opacity: 0.7;
+}
+
+img {
+  max-width: 100%;
+  display: block;
+}
+
+/* ============================================================
+   Typography scale
+   Display stays at weight 300 — never bold.
+   ============================================================ */
+h1,
+h2,
+h3,
+h4 {
+  font-family: var(--font-display);
+  font-weight: 300;
+  color: var(--ink);
+  margin: 0 0 var(--s-lg);
+}
+
+.display-mega {
+  font-size: clamp(32px, 7vw, 64px);
+  font-weight: 300;
+  line-height: 1.05;
+  letter-spacing: -1.92px;
+}
+.display-xl {
+  font-size: clamp(32px, 5.5vw, 48px);
+  font-weight: 300;
+  line-height: 1.08;
+  letter-spacing: -0.96px;
+}
+.display-lg {
+  font-size: clamp(28px, 4vw, 36px);
+  font-weight: 300;
+  line-height: 1.17;
+  letter-spacing: -0.36px;
+}
+.display-md {
+  font-size: clamp(26px, 3.4vw, 32px);
+  font-weight: 300;
+  line-height: 1.13;
+  letter-spacing: -0.32px;
+}
+.display-sm {
+  font-size: 24px;
+  font-weight: 300;
+  line-height: 1.2;
+}
+
+/* Inter titles */
+.title-md {
+  font-family: var(--font-sans);
+  font-size: 20px;
+  font-weight: 500;
+  line-height: 1.35;
+  color: var(--ink);
+}
+.title-sm {
+  font-family: var(--font-sans);
+  font-size: 18px;
+  font-weight: 500;
+  line-height: 1.44;
+  letter-spacing: 0.18px;
+  color: var(--ink);
+}
+
+p {
+  margin: 0 0 var(--s-base);
+}
+
+.body-md {
+  font-size: 16px;
+  line-height: 1.5;
+  letter-spacing: 0.16px;
+}
+.body-strong {
+  font-size: 16px;
+  font-weight: 500;
+  line-height: 1.5;
+  letter-spacing: 0.16px;
+  color: var(--body-strong);
+}
+.body-sm {
+  font-size: 15px;
+  line-height: 1.47;
+  letter-spacing: 0.15px;
+}
+.caption {
+  font-size: 14px;
+  line-height: 1.5;
+  color: var(--muted);
+}
+.caption-uppercase {
+  font-size: 12px;
+  font-weight: 600;
+  line-height: 1.4;
+  letter-spacing: 0.96px;
+  text-transform: uppercase;
+}
+
+.text-muted {
+  color: var(--muted);
+}
+.lead {
+  font-size: 18px;
+  line-height: 1.55;
+  letter-spacing: 0.16px;
+  color: var(--body);
+}
+
+/* ============================================================
+   Layout
+   ============================================================ */
+.container {
+  width: 100%;
+  max-width: var(--maxw);
+  margin: 0 auto;
+  padding: 0 var(--s-lg);
+}
+
+.section {
+  padding: var(--s-section) 0;
+}
+.section--tight {
+  padding: var(--s-xxl) 0;
+}
+.section--soft {
+  background: var(--canvas-soft);
+}
+
+.center {
+  text-align: center;
+}
+.measure {
+  max-width: 640px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.grid {
+  display: grid;
+  gap: var(--s-lg);
+}
+@media (min-width: 640px) {
+  .grid-2 {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  .grid-3 {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  .grid-4 {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+@media (min-width: 1024px) {
+  .grid-3 {
+    grid-template-columns: repeat(3, 1fr);
+  }
+  .grid-4 {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+
+/* ============================================================
+   Buttons — pill geometry, ink is the only CTA color
+   ============================================================ */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--s-xs);
+  font-family: var(--font-sans);
+  font-size: 15px;
+  font-weight: 500;
+  line-height: 1;
+  height: 40px;
+  padding: 10px 20px;
+  border-radius: var(--r-pill);
+  border: 1px solid transparent;
+  cursor: pointer;
+  transition: background-color 0.2s var(--ease), border-color 0.2s var(--ease),
+    color 0.2s var(--ease);
+}
+.btn:hover {
+  opacity: 1;
+}
+.btn-primary {
+  background: var(--primary);
+  color: var(--on-primary);
+}
+.btn-primary:hover,
+.btn-primary:active {
+  background: var(--primary-active);
+  color: var(--on-primary);
+}
+.btn-outline {
+  background: transparent;
+  color: var(--ink);
+  border-color: var(--hairline-strong);
+  padding: 9px 19px;
+}
+.btn-outline:hover {
+  border-color: var(--ink);
+  color: var(--ink);
+}
+/* Inverted pill for dark bands */
+.btn-on-dark {
+  background: var(--on-dark);
+  color: var(--ink);
+}
+.btn-on-dark:hover {
+  background: var(--surface-strong);
+  color: var(--ink);
+}
+
+/* ============================================================
+   Cards, badges
+   ============================================================ */
+.card {
+  background: var(--surface-card);
+  border: 1px solid var(--hairline);
+  border-radius: var(--r-xl);
+  padding: var(--s-lg);
+  transition: box-shadow 0.25s var(--ease), border-color 0.25s var(--ease);
+}
+.card:hover {
+  box-shadow: var(--shadow-soft);
+  border-color: var(--hairline-strong);
+}
+
+.badge-pill {
+  display: inline-block;
+  background: var(--surface-strong);
+  color: var(--ink);
+  font-size: 12px;
+  font-weight: 600;
+  line-height: 1.4;
+  letter-spacing: 0.96px;
+  text-transform: uppercase;
+  padding: 4px 10px;
+  border-radius: var(--r-pill);
+}
+
+.tag {
+  display: inline-block;
+  background: var(--surface-strong);
+  color: var(--muted);
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: 0.2px;
+  padding: 4px 10px;
+  border-radius: var(--r-pill);
+}
+
+/* ============================================================
+   Atmospheric gradient orbs — decoration only
+   ============================================================ */
+/* Radial gradients are soft on their own — no blur filter, which would spawn a
+   large compositing layer and can swallow sibling content on some GPUs. */
+.orb {
+  position: absolute;
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 0;
+  opacity: 0.5;
+}
+.orb--mint {
+  background: radial-gradient(
+    circle closest-side,
+    var(--gradient-mint) 0%,
+    rgba(167, 229, 211, 0.45) 45%,
+    transparent 78%
+  );
+}
+.orb--peach {
+  background: radial-gradient(
+    circle closest-side,
+    var(--gradient-peach) 0%,
+    rgba(244, 197, 168, 0.45) 45%,
+    transparent 78%
+  );
+}
+.orb--lavender {
+  background: radial-gradient(
+    circle closest-side,
+    var(--gradient-lavender) 0%,
+    rgba(200, 184, 224, 0.45) 45%,
+    transparent 78%
+  );
+}
+.orb--sky {
+  background: radial-gradient(
+    circle closest-side,
+    var(--gradient-sky) 0%,
+    rgba(168, 200, 232, 0.45) 45%,
+    transparent 78%
+  );
+}
+.orb--rose {
+  background: radial-gradient(
+    circle closest-side,
+    var(--gradient-rose) 0%,
+    rgba(232, 184, 196, 0.45) 45%,
+    transparent 78%
+  );
+}
+
+/* ============================================================
+   Motion
+   ============================================================ */
+
+/* Reveal-on-scroll. `--d` sets a per-element stagger delay. */
+.reveal {
+  opacity: 0;
+  transform: translateY(16px);
+  transition: opacity 0.7s var(--ease), transform 0.7s var(--ease);
+  transition-delay: var(--d, 0s);
+}
+.reveal.is-visible {
+  opacity: 1;
+  transform: none;
+}
+
+/* Staggered children — set on a grid/list wrapper. */
+.stagger > * {
+  opacity: 0;
+  transform: translateY(18px);
+  transition: opacity 0.65s var(--ease), transform 0.65s var(--ease);
+}
+.stagger.is-visible > * {
+  opacity: 1;
+  transform: none;
+}
+.stagger.is-visible > *:nth-child(1) { transition-delay: 0.05s; }
+.stagger.is-visible > *:nth-child(2) { transition-delay: 0.13s; }
+.stagger.is-visible > *:nth-child(3) { transition-delay: 0.21s; }
+.stagger.is-visible > *:nth-child(4) { transition-delay: 0.29s; }
+.stagger.is-visible > *:nth-child(5) { transition-delay: 0.37s; }
+.stagger.is-visible > *:nth-child(6) { transition-delay: 0.45s; }
+
+/* Hero entrance — plays on load rather than on scroll. */
+@keyframes rise {
+  from {
+    opacity: 0;
+    transform: translateY(22px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+.rise {
+  animation: rise 0.9s var(--ease) both;
+  animation-delay: var(--d, 0s);
+}
+
+/* Orb drift — slow, ambient, never synced. */
+@keyframes drift-a {
+  0%, 100% { transform: translate3d(0, 0, 0) scale(1); }
+  33% { transform: translate3d(3%, 4%, 0) scale(1.06); }
+  66% { transform: translate3d(-2%, 2%, 0) scale(0.97); }
+}
+@keyframes drift-b {
+  0%, 100% { transform: translate3d(0, 0, 0) scale(1); }
+  50% { transform: translate3d(-4%, -3%, 0) scale(1.08); }
+}
+/* No `will-change` here — these layers are large, and permanently promoting
+   several of them causes dropped paints on weaker GPUs. The animation
+   promotes them for its duration on its own. */
+.orb {
+  animation: drift-a 22s ease-in-out infinite;
+}
+.orb--lavender,
+.orb--rose {
+  animation: drift-b 28s ease-in-out infinite;
+}
+.orb--peach {
+  animation-duration: 26s;
+  animation-direction: reverse;
+}
+
+/* Animated underline for text links. */
+.link-underline {
+  position: relative;
+  display: inline-block;
+}
+.link-underline::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  bottom: -2px;
+  width: 100%;
+  height: 1px;
+  background: currentColor;
+  transform: scaleX(0);
+  transform-origin: right;
+  transition: transform 0.35s var(--ease);
+}
+.link-underline:hover::after {
+  transform: scaleX(1);
+  transform-origin: left;
+}
+
+/* Buttons get a touch of lift. */
+.btn {
+  transition: background-color 0.2s var(--ease), border-color 0.2s var(--ease),
+    color 0.2s var(--ease), transform 0.2s var(--ease);
+}
+.btn:hover {
+  transform: translateY(-2px);
+}
+.btn:active {
+  transform: translateY(0);
+}
+
+/* Cards lift and lighten on hover. */
+.card {
+  transition: box-shadow 0.3s var(--ease), border-color 0.3s var(--ease),
+    transform 0.3s var(--ease);
+}
+.card:hover {
+  transform: translateY(-4px);
+}
+
+/* Page transitions (Astro view transitions). */
+@keyframes page-in {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+}
+@keyframes page-out {
+  to {
+    opacity: 0;
+    transform: translateY(-6px);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .reveal,
+  .stagger > * {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+  .rise {
+    animation: none;
+  }
+  .orb {
+    animation: none;
+  }
+  .btn:hover,
+  .card:hover {
+    transform: none;
+  }
+  html {
+    scroll-behavior: auto;
+  }
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
