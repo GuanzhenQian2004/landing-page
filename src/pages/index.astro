@@ -44,30 +44,35 @@ const featuredCards = await Promise.all(
     <div class="orb orb--peach hero__orb hero__orb--3"></div>
 
     <div class="container hero__inner">
-      <div class="hero__text reveal">
-        <span class="badge-pill">Charlottesville, VA</span>
+      <div class="hero__text">
+        <span class="badge-pill rise">Charlottesville, VA</span>
         <h1 class="display-mega hero__title">
-          Building intelligent,<br />scalable software.
+          <span class="hero__line rise" style="--d:0.1s">Building intelligent,</span>
+          <span class="hero__line rise" style="--d:0.2s">scalable software.</span>
         </h1>
-        <p class="lead hero__sub">
+        <p class="lead hero__sub rise" style="--d:0.32s">
           I'm Steven Qian — a computer science student at the University of Virginia
           working across machine learning, cloud infrastructure, and full-stack
           engineering.
         </p>
-        <div class="hero__cta">
-          <a class="btn btn-primary" href="/resume">View résumé</a>
+        <div class="hero__cta rise" style="--d:0.42s">
+          <a class="btn btn-primary" href="/resume">View resume</a>
           <a class="btn btn-outline" href="/projects">See projects</a>
         </div>
       </div>
 
-      <div class="hero__portrait reveal">
+      <div class="hero__portrait rise" style="--d:0.18s">
         <img src="/assets/profile.png" alt="Steven Qian" width="420" height="420" />
       </div>
     </div>
+
+    <a class="hero__scroll" href="#about" aria-label="Scroll to about">
+      <span class="hero__scroll-line"></span>
+    </a>
   </section>
 
   <!-- About -->
-  <section class="section">
+  <section class="section" id="about">
     <div class="container">
       <div class="about">
         <div class="about__label">
@@ -100,10 +105,11 @@ const featuredCards = await Promise.all(
         <span class="caption-uppercase text-muted">What I do</span>
         <h2 class="display-lg reveal" style="margin-top:var(--s-sm)">Areas of expertise</h2>
       </div>
-      <div class="grid grid-4">
+      <div class="grid grid-4 stagger">
         {
-          expertise.map((e) => (
-            <div class="card reveal">
+          expertise.map((e, i) => (
+            <div class="card expertise">
+              <span class="expertise__num caption-uppercase">{String(i + 1).padStart(2, '0')}</span>
               <h3 class="title-md" style="margin:0 0 var(--s-xs)">{e.title}</h3>
               <p class="body-sm text-muted" style="margin:0">{e.body}</p>
             </div>
@@ -123,18 +129,20 @@ const featuredCards = await Promise.all(
         </div>
         <a class="btn btn-outline" href="/projects">All projects</a>
       </div>
-      <div class="grid grid-3">
+      <div class="grid grid-3 stagger">
         {
           featuredCards.map(({ entry, Content }) => (
             <ProjectCard
+              href={`/projects/${entry.id}`}
               title={entry.data.title}
               organization={entry.data.organization}
               dateLabel={entry.data.dateLabel}
               cover={entry.data.cover}
-              link={entry.data.link}
+              hasVideo={!!entry.data.video}
+              mediaCount={entry.data.gallery.length}
               tags={entry.data.tags}
             >
-              <Content />
+              {entry.data.summary ? <p>{entry.data.summary}</p> : <Content />}
             </ProjectCard>
           ))
         }
@@ -179,6 +187,46 @@ const featuredCards = await Promise.all(
   }
   .hero__title {
     margin: var(--s-lg) 0 var(--s-lg);
+  }
+  .hero__line {
+    display: block;
+  }
+
+  /* Scroll cue */
+  .hero__scroll {
+    position: absolute;
+    bottom: var(--s-lg);
+    left: 50%;
+    translate: -50% 0;
+    z-index: 1;
+    display: block;
+    width: 24px;
+    height: 44px;
+  }
+  .hero__scroll-line {
+    position: absolute;
+    left: 50%;
+    top: 0;
+    width: 1px;
+    height: 100%;
+    background: var(--hairline-strong);
+    overflow: hidden;
+  }
+  .hero__scroll-line::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: var(--ink);
+    animation: scroll-cue 2.2s var(--ease) infinite;
+  }
+  @keyframes scroll-cue {
+    0% {
+      transform: translateY(-100%);
+    }
+    60%,
+    100% {
+      transform: translateY(100%);
+    }
   }
   .hero__sub {
     max-width: 52ch;
@@ -239,6 +287,16 @@ const featuredCards = await Promise.all(
   }
   .about__body h2 {
     margin-bottom: var(--s-lg);
+  }
+
+  /* Expertise cards */
+  .expertise {
+    position: relative;
+  }
+  .expertise__num {
+    display: block;
+    color: var(--muted-soft);
+    margin-bottom: var(--s-sm);
   }
 
   /* Section heads */

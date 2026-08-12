@@ -9,7 +9,6 @@ backend:
 media_folder: public/assets/projects
 public_folder: /assets/projects
 
-# Commit messages written to the repo when you save in the admin UI.
 site_url: https://stevenqian.com
 display_url: https://stevenqian.com
 
@@ -32,19 +31,31 @@ collections:
       - label: Title
         name: title
         widget: string
-        hint: The project name shown on the card.
+        hint: The project name, shown on the card and the project page.
+
+      - label: Short summary
+        name: summary
+        widget: text
+        required: false
+        hint: One or two sentences. Shown on the card and under the title.
 
       - label: Organization
         name: organization
         widget: string
         required: false
-        hint: Company, club, or school this was built for. Optional.
+        hint: Company, club, or school this was built for.
+
+      - label: Your role
+        name: role
+        widget: string
+        required: false
+        hint: 'e.g. Machine Learning Engineer, Data Pipeline Developer.'
 
       - label: Date label
         name: dateLabel
         widget: string
         required: false
-        hint: 'Shown on the card, e.g. "August 2024 – Present" or "March 2024".'
+        hint: 'Shown on the page, e.g. "August 2024 – Present".'
 
       - label: Sort date
         name: date
@@ -60,19 +71,54 @@ collections:
         default: false
         required: false
 
+      # --- Media ---------------------------------------------------------
       - label: Cover image
         name: cover
         widget: image
         required: false
         allow_multiple: false
-        hint: Optional. Shown at the top of the card (16:9 works best).
+        hint: Shown on the card and at the top of the project page (16:10 works best).
 
-      - label: External link
+      - label: Video
+        name: video
+        widget: string
+        required: false
+        hint: >-
+          Optional. Paste a YouTube or Vimeo link, or upload an .mp4 to
+          public/assets/projects and enter /assets/projects/yourfile.mp4.
+          A video replaces the cover image at the top of the page.
+
+      - label: Gallery
+        name: gallery
+        widget: list
+        required: false
+        default: []
+        label_singular: Image
+        summary: '{{fields.caption}}'
+        hint: Extra screenshots or photos. Click one on the site to enlarge it.
+        fields:
+          - label: Image
+            name: src
+            widget: image
+          - label: Caption
+            name: caption
+            widget: string
+            required: false
+
+      # --- Links ---------------------------------------------------------
+      - label: Live link
         name: link
         widget: string
         required: false
         pattern: ['^https?://.+', 'Must be a full URL starting with http:// or https://']
-        hint: Optional. Makes the whole card clickable — repo, demo, or write-up.
+        hint: Optional. Demo, write-up, or product page.
+
+      - label: Source code
+        name: repo
+        widget: string
+        required: false
+        pattern: ['^https?://.+', 'Must be a full URL starting with http:// or https://']
+        hint: Optional. Link to the GitHub repository.
 
       - label: Tags
         name: tags
@@ -88,7 +134,9 @@ collections:
         required: false
         hint: Turn on to remove it from the site without deleting it.
 
-      - label: Description
+      - label: Full write-up
         name: body
         widget: markdown
-        hint: A short paragraph describing what you built and its impact.
+        hint: >-
+          The main content of the project page. Add headings, lists, links, and
+          images — drag images straight into the editor to upload them.

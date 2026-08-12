@@ -1,40 +1,69 @@
 ---
 interface Props {
+  href: string;
   title: string;
   organization?: string;
   dateLabel?: string;
   cover?: string;
-  link?: string;
+  hasVideo?: boolean;
+  mediaCount?: number;
   tags?: string[];
 }
-const { title, organization, dateLabel, cover, link, tags = [] } = Astro.props;
-const Wrapper = link ? 'a' : 'div';
+const {
+  href,
+  title,
+  organization,
+  dateLabel,
+  cover,
+  hasVideo = false,
+  mediaCount = 0,
+  tags = [],
+} = Astro.props;
 ---
 
-<Wrapper
-  class="project card reveal"
-  {...link ? { href: link, target: '_blank', rel: 'noopener' } : {}}
->
-  {cover && <img class="project__cover" src={cover} alt={title} loading="lazy" />}
-  <div class="project__body">
-    {dateLabel && <div class="caption-uppercase project__date">{dateLabel}</div>}
-    <h3 class="title-md project__title">
-      {title}
-      {link && <span class="project__arrow" aria-hidden="true">↗</span>}
-    </h3>
-    {organization && <div class="caption project__org">{organization}</div>}
-    <div class="project__desc"><slot /></div>
+<a class="project card reveal" href={href}>
+  <div class="project__media">
     {
-      tags.length > 0 && (
-        <div class="project__tags">
-          {tags.map((t) => (
-            <span class="tag">{t}</span>
-          ))}
+      cover ? (
+        <img class="project__cover" src={cover} alt="" loading="lazy" />
+      ) : (
+        <div class="project__placeholder" aria-hidden="true">
+          <span>{title.charAt(0)}</span>
         </div>
       )
     }
+    {
+      (hasVideo || mediaCount > 0) && (
+        <span class="project__media-badge">
+          {hasVideo ? '▶ Video' : `${mediaCount} image${mediaCount > 1 ? 's' : ''}`}
+        </span>
+      )
+    }
   </div>
-</Wrapper>
+
+  <div class="project__body">
+    {dateLabel && <div class="caption-uppercase project__date">{dateLabel}</div>}
+    <h3 class="title-md project__title">{title}</h3>
+    {organization && <div class="caption project__org">{organization}</div>}
+    <div class="project__desc"><slot /></div>
+
+    <div class="project__foot">
+      {
+        tags.length > 0 && (
+          <div class="project__tags">
+            {tags.slice(0, 3).map((t) => (
+              <span class="tag">{t}</span>
+            ))}
+            {tags.length > 3 && <span class="tag">+{tags.length - 3}</span>}
+          </div>
+        )
+      }
+      <span class="project__more">
+        View project <span class="project__arrow" aria-hidden="true">→</span>
+      </span>
+    </div>
+  </div>
+</a>
 
 <style>
   .project {
@@ -43,16 +72,56 @@ const Wrapper = link ? 'a' : 'div';
     padding: 0;
     overflow: hidden;
     height: 100%;
+    color: inherit;
   }
   .project:hover {
     opacity: 1;
   }
-  .project__cover {
-    width: 100%;
-    aspect-ratio: 16 / 9;
-    object-fit: cover;
+
+  .project__media {
+    position: relative;
+    overflow: hidden;
     border-bottom: 1px solid var(--hairline);
   }
+  .project__cover,
+  .project__placeholder {
+    width: 100%;
+    aspect-ratio: 16 / 10;
+    object-fit: cover;
+    transition: transform 0.5s var(--ease);
+  }
+  .project:hover .project__cover,
+  .project:hover .project__placeholder {
+    transform: scale(1.04);
+  }
+  /* Fallback tile when a project has no cover image yet. */
+  .project__placeholder {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(135deg, var(--surface-strong), var(--canvas-soft));
+  }
+  .project__placeholder span {
+    font-family: var(--font-display);
+    font-weight: 300;
+    font-size: 56px;
+    color: var(--muted-soft);
+  }
+  .project__media-badge {
+    position: absolute;
+    top: var(--s-sm);
+    left: var(--s-sm);
+    background: rgba(12, 10, 9, 0.72);
+    color: #fff;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.6px;
+    text-transform: uppercase;
+    padding: 4px 9px;
+    border-radius: var(--r-pill);
+    backdrop-filter: blur(6px);
+  }
+
   .project__body {
     padding: var(--s-lg);
     display: flex;
@@ -65,20 +134,6 @@ const Wrapper = link ? 'a' : 'div';
   }
   .project__title {
     margin: 0;
-    display: flex;
-    align-items: baseline;
-    gap: var(--s-xs);
-  }
-  .project__arrow {
-    font-size: 14px;
-    color: var(--muted);
-    opacity: 0;
-    transform: translate(-3px, 3px);
-    transition: opacity 0.2s var(--ease), transform 0.2s var(--ease);
-  }
-  .project:hover .project__arrow {
-    opacity: 1;
-    transform: none;
   }
   .project__org {
     margin-top: var(--s-xxs);
@@ -98,11 +153,29 @@ const Wrapper = link ? 'a' : 'div';
     color: var(--body-strong);
     font-weight: 500;
   }
+
+  .project__foot {
+    margin-top: auto;
+    padding-top: var(--s-md);
+  }
   .project__tags {
     display: flex;
     flex-wrap: wrap;
     gap: var(--s-xs);
-    margin-top: var(--s-md);
-    padding-top: var(--s-base);
+    margin-bottom: var(--s-base);
+  }
+  .project__more {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--ink);
+  }
+  .project__arrow {
+    transition: transform 0.25s var(--ease);
+  }
+  .project:hover .project__arrow {
+    transform: translateX(4px);
   }
 </style>

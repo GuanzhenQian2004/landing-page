@@ -1,5 +1,5 @@
 ---
-// Renders /public/resume.pdf onto styled white page canvases so the résumé
+// Renders /public/resume.pdf onto styled white page canvases so the resume
 // matches the site's editorial look instead of the browser's dark PDF chrome.
 // The PDF itself stays the single source of truth — replace the file and this
 // component picks up the new content with no code changes.
@@ -12,14 +12,14 @@ const { src = '/resume.pdf' } = Astro.props;
 <div class="pdf" data-pdf data-src={src}>
   <div class="pdf__status" data-status>
     <span class="pdf__spinner" aria-hidden="true"></span>
-    <span class="caption">Loading résumé…</span>
+    <span class="caption">Loading resume…</span>
   </div>
   <div class="pdf__pages" data-pages></div>
 
   <noscript>
     <div class="pdf__fallback">
-      <p class="text-muted" style="margin:0">Enable JavaScript to preview the résumé here.</p>
-      <a class="btn btn-primary" href={src} target="_blank" rel="noopener">Open résumé</a>
+      <p class="text-muted" style="margin:0">Enable JavaScript to preview the resume here.</p>
+      <a class="btn btn-primary" href={src} target="_blank" rel="noopener">Open resume</a>
     </div>
   </noscript>
 </div>
@@ -96,7 +96,7 @@ const { src = '/resume.pdf' } = Astro.props;
     statusEl.className = 'pdf__fallback';
     statusEl.innerHTML = `
       <p class="text-muted" style="margin:0">${message}</p>
-      <a class="btn btn-primary" href="${src}" target="_blank" rel="noopener">Open résumé</a>`;
+      <a class="btn btn-primary" href="${src}" target="_blank" rel="noopener">Open resume</a>`;
   }
 
   async function renderPdf() {
@@ -121,7 +121,7 @@ const { src = '/resume.pdf' } = Astro.props;
         canvas.setAttribute('role', 'img');
         canvas.setAttribute(
           'aria-label',
-          `Résumé page ${n} of ${doc.numPages}. Download the PDF for a text version.`
+          `Resume page ${n} of ${doc.numPages}. Download the PDF for a text version.`
         );
 
         const ctx = canvas.getContext('2d');
@@ -132,8 +132,8 @@ const { src = '/resume.pdf' } = Astro.props;
 
       statusEl?.setAttribute('hidden', '');
     } catch (err) {
-      console.error('Résumé preview failed to render:', err);
-      showFallback("The résumé preview couldn't load.");
+      console.error('Resume preview failed to render:', err);
+      showFallback("The resume preview couldn't load.");
     }
   }
 
