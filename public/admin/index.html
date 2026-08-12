@@ -5,9 +5,23 @@
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="robots" content="noindex" />
     <title>Content Manager — Steven Qian</title>
-    <link rel="icon" type="image/x-icon" href="/favicon.ico" />
+    <link rel="icon" type="image/svg+xml" href="/admin/logo.svg" />
   </head>
   <body>
     <script src="https://unpkg.com/@sveltia/cms@0.111.0/dist/sveltia-cms.js"></script>
+
+    <script>
+      // Style the preview pane to match stevenqian.com. The editor's own UI is
+      // Sveltia's and can't be themed — this covers the preview only.
+      // Registered against a URL so edits to preview.css apply without touching
+      // this file; the CMS resolves it relative to /admin/.
+      if (window.CMS) {
+        window.CMS.registerPreviewStyle('/admin/preview.css');
+      } else {
+        // The bundle is a classic IIFE, so this should never happen — but fail
+        // loudly rather than silently dropping the styling if that ever changes.
+        console.error('Sveltia CMS did not load; preview styles were not registered.');
+      }
+    </script>
   </body>
 </html>

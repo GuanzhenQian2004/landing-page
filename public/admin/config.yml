@@ -12,6 +12,11 @@ public_folder: /assets/projects
 site_url: https://stevenqian.com
 display_url: https://stevenqian.com
 
+# Branding on the login screen, header, and browser tab.
+app_title: Steven Qian
+logo:
+  src: /admin/logo.svg
+
 collections:
   - name: projects
     label: Projects
