@@ -1,0 +1,128 @@
+---
+const year = new Date().getFullYear();
+
+const columns = [
+  {
+    heading: 'Site',
+    links: [
+      { href: '/', label: 'Home' },
+      { href: '/resume', label: 'Résumé' },
+      { href: '/projects', label: 'Projects' },
+      { href: '/contact', label: 'Contact' },
+    ],
+  },
+  {
+    heading: 'Elsewhere',
+    links: [
+      { href: 'https://github.com/GuanzhenQian2004', label: 'GitHub', ext: true },
+      {
+        href: 'https://www.linkedin.com/in/steven-qian-16076822a',
+        label: 'LinkedIn',
+        ext: true,
+      },
+    ],
+  },
+  {
+    heading: 'Contact',
+    links: [
+      { href: 'mailto:uen9ke@virginia.edu', label: 'uen9ke@virginia.edu' },
+      { href: '/resume.pdf', label: 'Download résumé' },
+    ],
+  },
+];
+---
+
+<footer class="footer">
+  <div class="container">
+    <div class="footer__grid">
+      <div class="footer__brand">
+        <div class="footer__word">Steven Qian</div>
+        <p class="body-sm text-muted" style="margin:0;max-width:26ch">
+          Software, machine learning, and cloud — built in Charlottesville, VA.
+        </p>
+      </div>
+
+      {
+        columns.map((col) => (
+          <nav class="footer__col">
+            <div class="caption-uppercase footer__heading">{col.heading}</div>
+            {col.links.map((l) => (
+              <a
+                class="footer__link"
+                href={l.href}
+                {...('ext' in l && l.ext ? { target: '_blank', rel: 'noopener' } : {})}
+              >
+                {l.label}
+              </a>
+            ))}
+          </nav>
+        ))
+      }
+    </div>
+
+    <div class="footer__base">
+      <span class="body-sm text-muted">© {year} Steven Qian</span>
+      <span class="body-sm text-muted">Charlottesville, VA</span>
+    </div>
+  </div>
+</footer>
+
+<style>
+  .footer {
+    background: var(--canvas);
+    border-top: 1px solid var(--hairline);
+    padding: 64px 0 var(--s-xl);
+    margin-top: var(--s-section);
+  }
+  .footer__grid {
+    display: grid;
+    grid-template-columns: 1.5fr repeat(3, 1fr);
+    gap: var(--s-xl);
+  }
+  .footer__word {
+    font-family: var(--font-display);
+    font-weight: 300;
+    font-size: 24px;
+    line-height: 1.2;
+    color: var(--ink);
+    margin-bottom: var(--s-sm);
+  }
+  .footer__col {
+    display: flex;
+    flex-direction: column;
+    gap: var(--s-sm);
+  }
+  .footer__heading {
+    color: var(--muted-soft);
+    margin-bottom: var(--s-xxs);
+  }
+  .footer__link {
+    font-size: 15px;
+    line-height: 1.47;
+    letter-spacing: 0.15px;
+    color: var(--body);
+  }
+  .footer__link:hover {
+    color: var(--ink);
+    opacity: 1;
+  }
+  .footer__base {
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: var(--s-sm);
+    margin-top: var(--s-xxl);
+    padding-top: var(--s-lg);
+    border-top: 1px solid var(--hairline);
+  }
+
+  @media (max-width: 860px) {
+    .footer__grid {
+      grid-template-columns: 1fr 1fr;
+      gap: var(--s-xl) var(--s-lg);
+    }
+    .footer__brand {
+      grid-column: 1 / -1;
+    }
+  }
+</style>

@@ -1,0 +1,108 @@
+---
+interface Props {
+  title: string;
+  organization?: string;
+  dateLabel?: string;
+  cover?: string;
+  link?: string;
+  tags?: string[];
+}
+const { title, organization, dateLabel, cover, link, tags = [] } = Astro.props;
+const Wrapper = link ? 'a' : 'div';
+---
+
+<Wrapper
+  class="project card reveal"
+  {...link ? { href: link, target: '_blank', rel: 'noopener' } : {}}
+>
+  {cover && <img class="project__cover" src={cover} alt={title} loading="lazy" />}
+  <div class="project__body">
+    {dateLabel && <div class="caption-uppercase project__date">{dateLabel}</div>}
+    <h3 class="title-md project__title">
+      {title}
+      {link && <span class="project__arrow" aria-hidden="true">↗</span>}
+    </h3>
+    {organization && <div class="caption project__org">{organization}</div>}
+    <div class="project__desc"><slot /></div>
+    {
+      tags.length > 0 && (
+        <div class="project__tags">
+          {tags.map((t) => (
+            <span class="tag">{t}</span>
+          ))}
+        </div>
+      )
+    }
+  </div>
+</Wrapper>
+
+<style>
+  .project {
+    display: flex;
+    flex-direction: column;
+    padding: 0;
+    overflow: hidden;
+    height: 100%;
+  }
+  .project:hover {
+    opacity: 1;
+  }
+  .project__cover {
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    object-fit: cover;
+    border-bottom: 1px solid var(--hairline);
+  }
+  .project__body {
+    padding: var(--s-lg);
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+  }
+  .project__date {
+    color: var(--muted-soft);
+    margin-bottom: var(--s-sm);
+  }
+  .project__title {
+    margin: 0;
+    display: flex;
+    align-items: baseline;
+    gap: var(--s-xs);
+  }
+  .project__arrow {
+    font-size: 14px;
+    color: var(--muted);
+    opacity: 0;
+    transform: translate(-3px, 3px);
+    transition: opacity 0.2s var(--ease), transform 0.2s var(--ease);
+  }
+  .project:hover .project__arrow {
+    opacity: 1;
+    transform: none;
+  }
+  .project__org {
+    margin-top: var(--s-xxs);
+    color: var(--muted);
+  }
+  .project__desc {
+    margin-top: var(--s-sm);
+    color: var(--body);
+    font-size: 15px;
+    line-height: 1.47;
+    letter-spacing: 0.15px;
+  }
+  .project__desc :global(p) {
+    margin: 0;
+  }
+  .project__desc :global(strong) {
+    color: var(--body-strong);
+    font-weight: 500;
+  }
+  .project__tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--s-xs);
+    margin-top: var(--s-md);
+    padding-top: var(--s-base);
+  }
+</style>

@@ -1,0 +1,317 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import ProjectCard from '../components/ProjectCard.astro';
+import { getCollection, render } from 'astro:content';
+
+const expertise = [
+  {
+    title: 'Software Development',
+    body: 'Building robust, efficient applications with modern languages and tooling.',
+  },
+  {
+    title: 'Machine Learning',
+    body: 'Designing and training models to solve real problems across domains.',
+  },
+  {
+    title: 'Cloud Computing',
+    body: 'Leveraging AWS, GCP, and Azure to ship scalable, secure systems.',
+  },
+  {
+    title: 'Data Analysis',
+    body: 'Turning raw data into insight that drives better decisions.',
+  },
+];
+
+const all = (await getCollection('projects', (p) => !p.data.draft)).sort(
+  (a, b) => b.data.date.valueOf() - a.data.date.valueOf()
+);
+const featuredList = all.filter((p) => p.data.featured);
+const featured = (featuredList.length ? featuredList : all).slice(0, 3);
+
+const featuredCards = await Promise.all(
+  featured.map(async (entry) => {
+    const { Content } = await render(entry);
+    return { entry, Content };
+  })
+);
+---
+
+<BaseLayout title="Steven Qian — Software, Machine Learning, Cloud">
+  <!-- Hero -->
+  <section class="hero">
+    <div class="orb orb--mint hero__orb hero__orb--1"></div>
+    <div class="orb orb--lavender hero__orb hero__orb--2"></div>
+    <div class="orb orb--peach hero__orb hero__orb--3"></div>
+
+    <div class="container hero__inner">
+      <div class="hero__text reveal">
+        <span class="badge-pill">Charlottesville, VA</span>
+        <h1 class="display-mega hero__title">
+          Building intelligent,<br />scalable software.
+        </h1>
+        <p class="lead hero__sub">
+          I'm Steven Qian — a computer science student at the University of Virginia
+          working across machine learning, cloud infrastructure, and full-stack
+          engineering.
+        </p>
+        <div class="hero__cta">
+          <a class="btn btn-primary" href="/resume">View résumé</a>
+          <a class="btn btn-outline" href="/projects">See projects</a>
+        </div>
+      </div>
+
+      <div class="hero__portrait reveal">
+        <img src="/assets/profile.png" alt="Steven Qian" width="420" height="420" />
+      </div>
+    </div>
+  </section>
+
+  <!-- About -->
+  <section class="section">
+    <div class="container">
+      <div class="about">
+        <div class="about__label">
+          <span class="caption-uppercase text-muted">About</span>
+        </div>
+        <div class="about__body">
+          <h2 class="display-lg reveal">
+            Computer science at the University of&nbsp;Virginia, focused on
+            machine learning and cloud systems.
+          </h2>
+          <p class="lead reveal">
+            I work in Python, Java, TensorFlow, and AWS — building data pipelines,
+            training models, and shipping applications end to end.
+          </p>
+          <p class="reveal">
+            Recently I've developed data pipelines for Code for Charlottesville and
+            built an AI-powered academic assistant that took first place at a
+            university hackathon. Outside of coursework I'm usually exploring new
+            developments in AI or contributing to open source.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Expertise -->
+  <section class="section section--soft">
+    <div class="container">
+      <div class="head">
+        <span class="caption-uppercase text-muted">What I do</span>
+        <h2 class="display-lg reveal" style="margin-top:var(--s-sm)">Areas of expertise</h2>
+      </div>
+      <div class="grid grid-4">
+        {
+          expertise.map((e) => (
+            <div class="card reveal">
+              <h3 class="title-md" style="margin:0 0 var(--s-xs)">{e.title}</h3>
+              <p class="body-sm text-muted" style="margin:0">{e.body}</p>
+            </div>
+          ))
+        }
+      </div>
+    </div>
+  </section>
+
+  <!-- Featured projects -->
+  <section class="section">
+    <div class="container">
+      <div class="head head--split">
+        <div>
+          <span class="caption-uppercase text-muted">Selected work</span>
+          <h2 class="display-lg reveal" style="margin:var(--s-sm) 0 0">Featured projects</h2>
+        </div>
+        <a class="btn btn-outline" href="/projects">All projects</a>
+      </div>
+      <div class="grid grid-3">
+        {
+          featuredCards.map(({ entry, Content }) => (
+            <ProjectCard
+              title={entry.data.title}
+              organization={entry.data.organization}
+              dateLabel={entry.data.dateLabel}
+              cover={entry.data.cover}
+              link={entry.data.link}
+              tags={entry.data.tags}
+            >
+              <Content />
+            </ProjectCard>
+          ))
+        }
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA band -->
+  <section class="section">
+    <div class="container">
+      <div class="cta reveal">
+        <div class="orb orb--sky cta__orb cta__orb--1"></div>
+        <div class="orb orb--rose cta__orb cta__orb--2"></div>
+        <div class="cta__inner">
+          <h2 class="display-lg" style="margin-bottom:var(--s-sm)">
+            Let's work together.
+          </h2>
+          <p class="lead" style="max-width:44ch;margin:0 auto var(--s-lg)">
+            I'm open to internships, collaborations, and interesting problems.
+          </p>
+          <a class="btn btn-primary" href="/contact">Get in touch</a>
+        </div>
+      </div>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  /* Hero */
+  .hero {
+    position: relative;
+    overflow: hidden;
+    padding: var(--s-section) 0 var(--s-xxl);
+  }
+  .hero__inner {
+    position: relative;
+    z-index: 1;
+    display: grid;
+    grid-template-columns: 1.15fr 0.85fr;
+    align-items: center;
+    gap: var(--s-xxl);
+  }
+  .hero__title {
+    margin: var(--s-lg) 0 var(--s-lg);
+  }
+  .hero__sub {
+    max-width: 52ch;
+    margin-bottom: var(--s-xl);
+  }
+  .hero__cta {
+    display: flex;
+    gap: var(--s-sm);
+    flex-wrap: wrap;
+  }
+  .hero__orb {
+    width: 460px;
+    height: 460px;
+  }
+  .hero__orb--1 {
+    top: -140px;
+    right: 6%;
+  }
+  .hero__orb--2 {
+    top: 120px;
+    right: 28%;
+    width: 380px;
+    height: 380px;
+  }
+  .hero__orb--3 {
+    top: -60px;
+    left: -120px;
+    width: 340px;
+    height: 340px;
+    opacity: 0.4;
+  }
+  .hero__portrait {
+    display: flex;
+    justify-content: center;
+  }
+  .hero__portrait img {
+    width: min(400px, 100%);
+    height: auto;
+    aspect-ratio: 1;
+    object-fit: cover;
+    border-radius: var(--r-xxl);
+    border: 1px solid var(--hairline);
+    background: var(--surface-card);
+  }
+
+  /* About — editorial two-column with label rail */
+  .about {
+    display: grid;
+    grid-template-columns: 200px 1fr;
+    gap: var(--s-xl);
+    align-items: start;
+  }
+  .about__label {
+    padding-top: 10px;
+  }
+  .about__body {
+    max-width: 68ch;
+  }
+  .about__body h2 {
+    margin-bottom: var(--s-lg);
+  }
+
+  /* Section heads */
+  .head {
+    margin-bottom: var(--s-xxl);
+  }
+  .head--split {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: var(--s-lg);
+    flex-wrap: wrap;
+  }
+
+  /* CTA band */
+  .cta {
+    position: relative;
+    overflow: hidden;
+    background: var(--canvas-soft);
+    border: 1px solid var(--hairline);
+    border-radius: var(--r-xxl);
+    padding: var(--s-section) var(--s-xl);
+    text-align: center;
+  }
+  .cta__inner {
+    position: relative;
+    z-index: 1;
+  }
+  .cta__orb {
+    width: 380px;
+    height: 380px;
+    opacity: 0.45;
+  }
+  .cta__orb--1 {
+    top: -160px;
+    left: 12%;
+  }
+  .cta__orb--2 {
+    bottom: -180px;
+    right: 10%;
+  }
+
+  @media (max-width: 900px) {
+    .hero {
+      padding-top: var(--s-xxl);
+    }
+    .hero__inner {
+      grid-template-columns: 1fr;
+      text-align: center;
+    }
+    .hero__sub {
+      margin-left: auto;
+      margin-right: auto;
+    }
+    .hero__cta {
+      justify-content: center;
+    }
+    .hero__portrait {
+      order: -1;
+    }
+    .hero__portrait img {
+      width: min(240px, 62%);
+      border-radius: 50%;
+    }
+    .about {
+      grid-template-columns: 1fr;
+      gap: var(--s-base);
+    }
+    .about__label {
+      padding-top: 0;
+    }
+    .cta {
+      padding: var(--s-xxl) var(--s-md);
+    }
+  }
+</style>

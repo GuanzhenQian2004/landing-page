@@ -1,0 +1,66 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import ResumeViewer from '../components/ResumeViewer.astro';
+
+// /public/resume.pdf is the single source of truth for the résumé.
+// To update it, replace that file — this page needs no changes.
+const RESUME_URL = '/resume.pdf';
+---
+
+<BaseLayout
+  title="Résumé — Steven Qian"
+  description="Résumé of Steven Qian — B.S. Computer Science, University of Virginia."
+>
+  <section class="page-head">
+    <div class="orb orb--sky page-head__orb"></div>
+    <div class="container page-head__inner">
+      <span class="caption-uppercase text-muted">Background</span>
+      <h1 class="display-xl reveal" style="margin:var(--s-sm) 0 var(--s-base)">Résumé</h1>
+      <p class="lead reveal" style="max-width:56ch;margin:0 0 var(--s-xl)">
+        B.S. Computer Science at the University of Virginia, expected May 2026 —
+        focused on machine learning, cloud computing, and software engineering.
+      </p>
+      <div class="actions reveal">
+        <a class="btn btn-primary" href={RESUME_URL} download>Download PDF</a>
+        <a class="btn btn-outline" href={RESUME_URL} target="_blank" rel="noopener">
+          Open in new tab
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <section class="section--tight" style="padding-top:0">
+    <div class="container">
+      <div class="viewer-wrap reveal">
+        <ResumeViewer src={RESUME_URL} />
+      </div>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .page-head {
+    position: relative;
+    overflow: hidden;
+    padding: var(--s-section) 0 var(--s-xxl);
+  }
+  .page-head__inner {
+    position: relative;
+    z-index: 1;
+  }
+  .page-head__orb {
+    width: 420px;
+    height: 420px;
+    top: -180px;
+    right: 10%;
+    opacity: 0.4;
+  }
+  .actions {
+    display: flex;
+    gap: var(--s-sm);
+    flex-wrap: wrap;
+  }
+  .viewer-wrap {
+    max-width: 900px;
+  }
+</style>

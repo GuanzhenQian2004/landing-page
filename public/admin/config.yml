@@ -1,0 +1,94 @@
+backend:
+  name: github
+  repo: GuanzhenQian2004/landing-page
+  branch: main
+  # Auth relay — the Cloudflare Worker you deploy during setup (see README).
+  base_url: https://REPLACE-ME.workers.dev
+
+# Where uploaded images go, and how they're referenced in markdown.
+media_folder: public/assets/projects
+public_folder: /assets/projects
+
+# Commit messages written to the repo when you save in the admin UI.
+site_url: https://stevenqian.com
+display_url: https://stevenqian.com
+
+collections:
+  - name: projects
+    label: Projects
+    label_singular: Project
+    folder: src/content/projects
+    create: true
+    delete: true
+    slug: '{{slug}}'
+    extension: md
+    format: yaml-frontmatter
+    summary: '{{title}} — {{dateLabel}}'
+    sortable_fields: [date, title]
+    view_groups:
+      - label: Featured
+        field: featured
+    fields:
+      - label: Title
+        name: title
+        widget: string
+        hint: The project name shown on the card.
+
+      - label: Organization
+        name: organization
+        widget: string
+        required: false
+        hint: Company, club, or school this was built for. Optional.
+
+      - label: Date label
+        name: dateLabel
+        widget: string
+        required: false
+        hint: 'Shown on the card, e.g. "August 2024 – Present" or "March 2024".'
+
+      - label: Sort date
+        name: date
+        widget: datetime
+        date_format: 'YYYY-MM-DD'
+        time_format: false
+        picker_utc: true
+        hint: Used only for ordering — newest projects appear first.
+
+      - label: Featured on home page
+        name: featured
+        widget: boolean
+        default: false
+        required: false
+
+      - label: Cover image
+        name: cover
+        widget: image
+        required: false
+        allow_multiple: false
+        hint: Optional. Shown at the top of the card (16:9 works best).
+
+      - label: External link
+        name: link
+        widget: string
+        required: false
+        pattern: ['^https?://.+', 'Must be a full URL starting with http:// or https://']
+        hint: Optional. Makes the whole card clickable — repo, demo, or write-up.
+
+      - label: Tags
+        name: tags
+        widget: list
+        required: false
+        default: []
+        hint: 'Tech used, e.g. Python, React, AWS. Press Enter after each.'
+
+      - label: Hide this project
+        name: draft
+        widget: boolean
+        default: false
+        required: false
+        hint: Turn on to remove it from the site without deleting it.
+
+      - label: Description
+        name: body
+        widget: markdown
+        hint: A short paragraph describing what you built and its impact.

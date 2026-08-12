@@ -1,0 +1,138 @@
+---
+const path = Astro.url.pathname.replace(/\/$/, '') || '/';
+const links = [
+  { href: '/', label: 'Home' },
+  { href: '/resume', label: 'Résumé' },
+  { href: '/projects', label: 'Projects' },
+];
+const isActive = (href: string) =>
+  href === '/' ? path === '/' : path === href || path.startsWith(href + '/');
+---
+
+<header class="nav">
+  <div class="container nav__inner">
+    <a class="nav__brand" href="/">Steven Qian</a>
+
+    <button class="nav__toggle" aria-label="Toggle menu" aria-expanded="false">
+      <span></span><span></span><span></span>
+    </button>
+
+    <div class="nav__group" data-nav-links>
+      <nav class="nav__links">
+        {
+          links.map((l) => (
+            <a href={l.href} class={isActive(l.href) ? 'is-active' : ''}>
+              {l.label}
+            </a>
+          ))
+        }
+      </nav>
+      <a class="btn btn-primary nav__cta" href="/contact">Get in touch</a>
+    </div>
+  </div>
+</header>
+
+<style>
+  .nav {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    height: 64px;
+    background: rgba(245, 245, 245, 0.85);
+    backdrop-filter: saturate(180%) blur(12px);
+    -webkit-backdrop-filter: saturate(180%) blur(12px);
+    border-bottom: 1px solid var(--hairline);
+  }
+  .nav__inner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 64px;
+  }
+  .nav__brand {
+    font-family: var(--font-display);
+    font-weight: 300;
+    font-size: 22px;
+    letter-spacing: -0.32px;
+    color: var(--ink);
+  }
+  .nav__group {
+    display: flex;
+    align-items: center;
+    gap: var(--s-lg);
+  }
+  .nav__links {
+    display: flex;
+    gap: var(--s-lg);
+  }
+  .nav__links a {
+    font-size: 15px;
+    font-weight: 500;
+    line-height: 1.4;
+    color: var(--body);
+  }
+  .nav__links a:hover {
+    color: var(--ink);
+    opacity: 1;
+  }
+  .nav__links a.is-active {
+    color: var(--ink);
+  }
+  .nav__toggle {
+    display: none;
+    flex-direction: column;
+    gap: 5px;
+    background: none;
+    border: 0;
+    cursor: pointer;
+    padding: 8px;
+  }
+  .nav__toggle span {
+    width: 22px;
+    height: 1.5px;
+    background: var(--ink);
+    border-radius: 2px;
+  }
+
+  @media (max-width: 768px) {
+    .nav__toggle {
+      display: flex;
+    }
+    .nav__group {
+      position: absolute;
+      top: 64px;
+      left: 0;
+      right: 0;
+      flex-direction: column;
+      align-items: stretch;
+      gap: var(--s-sm);
+      background: var(--canvas);
+      border-bottom: 1px solid var(--hairline);
+      padding: var(--s-base) var(--s-lg) var(--s-lg);
+      transform: translateY(-130%);
+      transition: transform 0.3s var(--ease);
+    }
+    .nav__group.is-open {
+      transform: translateY(0);
+    }
+    .nav__links {
+      flex-direction: column;
+      gap: 0;
+    }
+    .nav__links a {
+      padding: var(--s-sm) 0;
+    }
+    .nav__cta {
+      align-self: flex-start;
+    }
+  }
+</style>
+
+<script>
+  const toggle = document.querySelector('.nav__toggle');
+  const group = document.querySelector('[data-nav-links]');
+  toggle?.addEventListener('click', () => {
+    const open = group?.classList.toggle('is-open');
+    toggle.setAttribute('aria-expanded', String(!!open));
+  });
+</script>
