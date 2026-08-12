@@ -3,7 +3,7 @@ backend:
   repo: GuanzhenQian2004/landing-page
   branch: main
   # Auth relay — the Cloudflare Worker you deploy during setup (see README).
-  base_url: https://REPLACE-ME.workers.dev
+  base_url: https://sveltia-cms-auth.stevenqian2004.workers.dev
 
 # Where uploaded images go, and how they're referenced in markdown.
 media_folder: public/assets/projects

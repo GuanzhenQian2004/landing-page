@@ -78,7 +78,7 @@ one-time, no-cost setup.
 2. Fill in:
    - **Application name:** `stevenqian.com CMS`
    - **Homepage URL:** `https://stevenqian.com`
-   - **Authorization callback URL:** `https://<your-worker>.workers.dev/callback`
+   - **Authorization callback URL:** `https://sveltia-cms-auth.stevenqian2004.workers.dev/callback`
      (you'll get this exact URL in step 2 — put a placeholder for now and edit it after)
 3. Click **Register application**, then **Generate a new client secret**.
 4. Keep the **Client ID** and **Client Secret** — you'll paste them into Cloudflare,
@@ -96,9 +96,9 @@ Use the maintained worker: <https://github.com/sveltia/sveltia-cms-auth>
    | `GITHUB_CLIENT_ID` | your Client ID |
    | `GITHUB_CLIENT_SECRET` | your Client Secret (mark as **encrypted**) |
    | `ALLOWED_DOMAINS` | `stevenqian.com` |
-4. Copy the worker URL (e.g. `https://sveltia-cms-auth.<you>.workers.dev`).
+4. Copy the worker URL (e.g. `https://sveltia-cms-auth.stevenqian2004.workers.dev`).
 5. Go back to the GitHub OAuth app and set the callback URL to
-   `https://sveltia-cms-auth.<you>.workers.dev/callback`.
+   `https://sveltia-cms-auth.stevenqian2004.workers.dev/callback`.
 
 ### 3. Point the CMS at your worker
 
