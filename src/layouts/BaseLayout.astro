@@ -7,11 +7,14 @@ import '../styles/global.css';
 interface Props {
   title?: string;
   description?: string;
+  /** Keep a page out of search results (internal/preview pages). */
+  noindex?: boolean;
 }
 
 const {
   title = 'Steven Qian',
   description = 'Portfolio of Steven Qian — software development, machine learning, cloud computing, and data analysis.',
+  noindex = false,
 } = Astro.props;
 
 const canonical = new URL(Astro.url.pathname, Astro.site);
@@ -25,6 +28,7 @@ const canonical = new URL(Astro.url.pathname, Astro.site);
     <title>{title}</title>
     <meta name="description" content={description} />
     <meta name="author" content="Steven Qian" />
+    {noindex && <meta name="robots" content="noindex, nofollow" />}
     <link rel="canonical" href={canonical} />
     <link rel="icon" type="image/x-icon" href="/favicon.ico" />
 

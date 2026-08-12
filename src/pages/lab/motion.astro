@@ -1,0 +1,95 @@
+---
+// TEMPORARY comparison page — not linked from the site, noindex.
+// Delete this file (and src/components/blocks/ if unused) once a motion
+// direction is chosen.
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import FlowDiagram from '../../components/blocks/FlowDiagram.astro';
+
+const stages = [
+  { label: 'Source systems', detail: 'Spreadsheets, legacy exports, manual entry' },
+  { label: 'Extract', detail: 'Scheduled pulls from each partner system' },
+  { label: 'Transform', detail: 'Normalize formats, dedupe, flag anomalies' },
+  { label: 'Load', detail: 'Clean, queryable database' },
+];
+---
+
+<BaseLayout
+  title="Motion comparison — internal"
+  description="Temporary page for comparing animation directions."
+  noindex
+>
+  <section class="section">
+    <div class="container" style="max-width:900px">
+      <span class="caption-uppercase text-muted">Internal · not linked publicly</span>
+      <h1 class="display-lg" style="margin:var(--s-sm) 0 var(--s-base)">
+        Which motion direction?
+      </h1>
+      <p class="lead" style="max-width:60ch">
+        The same diagram, built twice, using the real Charlottesville pipeline.
+        Scroll each into view to see it animate. Reload to replay.
+      </p>
+    </div>
+  </section>
+
+  <section class="section--tight">
+    <div class="container" style="max-width:900px">
+      <div class="variant">
+        <div class="variant__head">
+          <h2 class="title-md" style="margin:0">Option A — Restrained</h2>
+          <p class="body-sm text-muted" style="margin:4px 0 0">
+            Ink and hairlines only. Stages fade up in sequence, connectors draw,
+            then everything rests. Consistent with the rest of the site.
+          </p>
+        </div>
+        <FlowDiagram
+          title="How the pipeline works"
+          stages={stages}
+          variant="calm"
+          caption="Data accuracy and usability improved by 35%."
+        />
+      </div>
+
+      <div class="variant">
+        <div class="variant__head">
+          <h2 class="title-md" style="margin:0">Option B — Bold</h2>
+          <p class="body-sm text-muted" style="margin:4px 0 0">
+            Springy easing, pastel tints per stage, and a dot that keeps
+            travelling to suggest flowing data. Cards lift on hover.
+          </p>
+        </div>
+        <FlowDiagram
+          title="How the pipeline works"
+          stages={stages}
+          variant="bold"
+          caption="Data accuracy and usability improved by 35%."
+        />
+      </div>
+
+      <div class="note card">
+        <p class="body-sm" style="margin:0 0 8px">
+          <strong>Worth knowing:</strong> Option B uses your pastel gradients as
+          surface tints. Your design system reserves those for atmospheric
+          decoration and keeps content surfaces ink-only — so B is a deliberate
+          departure, not an extension.
+        </p>
+        <p class="body-sm text-muted" style="margin:0">
+          Both freeze into a readable static diagram under reduced-motion
+          settings, and neither conveys information through movement alone.
+        </p>
+      </div>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .variant {
+    padding: var(--s-xl) 0;
+    border-top: 1px solid var(--hairline);
+  }
+  .variant__head {
+    margin-bottom: var(--s-lg);
+  }
+  .note {
+    margin-top: var(--s-xl);
+  }
+</style>
